@@ -1,18 +1,16 @@
 <template>
-  <div>
-    <Header></Header>
-    <router-view />
+  <div class="discover">
+    <banner></banner>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Header from "@/layout/Header/Header.vue";
 
+import Banner from "@/view/discover/cpn/banner/Banner.vue";
 export default defineComponent({
-  name: "App",
   components: {
-    Header,
+    Banner,
   },
   setup() {
     return {};
@@ -20,7 +18,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="less">
-@import "./global/global.less";
-</style>
->
+<style lang="less" scoped></style>
