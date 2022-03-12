@@ -56,4 +56,8 @@ export default defineComponent({
   width: 100%;
   height: 285px;
 }
+
+.swiper-wrapper {
+  width: 100%;
+}
 </style>

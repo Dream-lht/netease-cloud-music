@@ -9,7 +9,7 @@
         </swiper>
       </div>
       <div class="download">
-        <a href="#" class="dow_bnt" @click="routeDownload"></a>
+        <a href="javascript:;" class="dow_bnt" @click="routeDownload"></a>
         <span> PC 安卓 iPhone WP iPad Mac 六大客户端 </span>
       </div>
     </div>
@@ -85,7 +85,7 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .main {
-  width: 100vw;
+  width: 100%;
   height: 285px;
 }
 
@@ -100,7 +100,7 @@ export default defineComponent({
   width: 730px;
   height: 285px;
   .image {
-    width: 730px;
+    width: 100%;
     height: 100%;
   }
 }
