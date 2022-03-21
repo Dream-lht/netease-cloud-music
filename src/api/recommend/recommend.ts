@@ -27,10 +27,64 @@ export const getNewDisc = function (): AxiosPromise {
   });
 };
 
-//获取榜单
-export const topList = function (): AxiosPromise {
+// 获取榜单
+export const getList = function (): AxiosPromise {
   return request({
     method: "GET",
-    url: "/top/list?idx=6",
+    url: "/toplist/detail",
+  });
+};
+
+//获取榜单详情
+export const getTopList = function (id: number): AxiosPromise {
+  return request({
+    method: "GET",
+    url: "/playlist/detail",
+    params: {
+      id,
+    },
+  });
+};
+
+// 获取歌曲详情
+export const getSongDetial = function (ids: string): AxiosPromise {
+  return request({
+    method: "GET",
+    url: "/song/detail",
+    params: {
+      ids,
+    },
+  });
+};
+
+// 获取入驻歌手
+export const getSettledSong = function (): AxiosPromise {
+  return request({
+    method: "GET",
+    url: "/top/artists?offset=0&limit=5",
+  });
+};
+// 获取热门主播
+export const getHotAnchor = function (): AxiosPromise {
+  return request({
+    method: "GET",
+    url: "/dj/toplist/popular?limit=5",
+  });
+};
+
+//获取歌单详情
+export const getSongAll = function (
+  id: number | string,
+  limit: number,
+  offset: number
+): AxiosPromise {
+  return request({
+    method: "GET",
+    url: "/playlist/track/all",
+    params: {
+      id,
+      limit,
+      offset,
+    },
   });
 };

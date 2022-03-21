@@ -7,7 +7,11 @@
         <new-disc></new-disc>
         <leaderboard></leaderboard>
       </div>
-      <div class="right"></div>
+      <div class="right">
+        <user-login></user-login>
+        <settled-song></settled-song>
+        <hot-anchor></hot-anchor>
+      </div>
     </div>
   </div>
 </template>
@@ -19,12 +23,18 @@ import Banner from "@/view/discover/cpn/banner/Banner.vue";
 import HotRecommend from "./cpn/hotRecommed/HotRecommend.vue";
 import NewDisc from "./cpn/newDisc/NewDisc.vue";
 import Leaderboard from "./cpn/leaderboard/Leaderboard.vue";
+import UserLogin from "./cpn/userLogin/UserLogin.vue";
+import SettledSong from "./cpn/settledSong/SettledSong.vue";
+import HotAnchor from "./cpn/hotAnchor/HotAnchor.vue";
 export default defineComponent({
   components: {
     Banner,
     HotRecommend,
     NewDisc,
     Leaderboard,
+    UserLogin,
+    SettledSong,
+    HotAnchor,
   },
   setup() {
     return {};
@@ -45,6 +55,7 @@ export default defineComponent({
 }
 
 .context {
+  display: flex;
   width: 980px;
   margin: 0 auto;
   height: auto;

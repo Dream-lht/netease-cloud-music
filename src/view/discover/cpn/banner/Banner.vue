@@ -2,11 +2,17 @@
   <div class="main" :style="{ backgroundImage: 'url(' + bgImageUrl + '' }">
     <div class="center_box">
       <div class="banner">
-        <swiper @next="onNext" @prev="onPrev">
-          <swiper-slide v-for="banner in banners" :key="banner.imageUrl">
+        <el-carousel
+          :interval="100000"
+          arrow="hover"
+          @change="changeBgImage"
+          ref="carouseRef"
+          v-if="isReactive"
+        >
+          <el-carousel-item v-for="banner in banners" :key="banner.imageUrl">
             <img :src="banner.imageUrl" class="image" />
-          </swiper-slide>
-        </swiper>
+          </el-carousel-item>
+        </el-carousel>
       </div>
       <div class="download">
         <a href="javascript:;" class="dow_bnt" @click="routeDownload"></a>
@@ -17,66 +23,74 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
-
-import Swiper from "@/components/Swiper/Swiper.vue";
-import SwiperSlide from "@/components/SwiperSlide/SwiperSlide.vue";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
+  watch,
+  nextTick,
+} from "vue";
 
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import cacheStore from "@/utils/Cache";
+
 import { formatImageUrl } from "@/utils/format";
 
 export default defineComponent({
-  components: {
-    Swiper,
-    SwiperSlide,
-  },
   setup() {
     //获取Store实例
     const Store = useStore();
     Store.dispatch("getBannerData");
-
     const router = useRouter();
     // 设置当前播放张数序号
     const bannerIndex = ref(0);
+    const carouselState = reactive<any>({
+      carouseRef: null,
+    });
+
+    const isReactive = ref(false);
     // 获取轮播图数据
     // eslint-disable-next-line no-debugger
-    const banners = computed(() => Store.getters.getBanner);
+    const banners = computed(() => {
+      return Store.getters.getBanner ? Store.getters.getBanner : [];
+    });
 
-    console.log(banners.value);
     const bgImageUrl = computed(() => {
-      return formatImageUrl(banners.value[bannerIndex.value].imageUrl);
+      if (banners.value.length !== 0) {
+        return formatImageUrl(banners.value[bannerIndex.value].imageUrl);
+      } else {
+        return "";
+      }
     });
 
     //当轮播图发生变化
-    const onNext: () => void = () => {
-      if (bannerIndex.value < banners.value.length - 1) {
-        bannerIndex.value++;
-      } else {
-        bannerIndex.value = 0;
-      }
-    };
-
-    const onPrev: () => void = () => {
-      if (bannerIndex.value < 1) {
-        bannerIndex.value = banners.value.length - 1;
-      } else {
-        bannerIndex.value--;
-      }
+    const changeBgImage: (to: number, from: number) => void = (to, from) => {
+      bannerIndex.value = to;
     };
 
     //跳转路由
-
     const routeDownload = () => {
       console.log("跳转");
       router.push("/download");
     };
+
+    watch(banners, (count, prevCount) => {
+      isReactive.value = true;
+    });
+
+    onMounted(() => {
+      // const carouselRefProxy: any = carouselState.carouseRef;
+    });
     return {
       banners,
       bgImageUrl,
-      onNext,
-      onPrev,
+      isReactive,
+      ...toRefs(carouselState),
+      changeBgImage,
       routeDownload,
     };
   },
@@ -99,9 +113,26 @@ export default defineComponent({
 .banner {
   width: 730px;
   height: 285px;
-  .image {
-    width: 100%;
-    height: 100%;
+  /deep/.el-carousel {
+    width: 730px;
+    height: 285px;
+    .el-carousel__container {
+      height: 285px;
+      .el-carousel__item {
+        width: 730px;
+        height: 285px;
+        .image {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .el-carousel__indicators {
+      .el-carousel__button {
+        width: 15px;
+      }
+    }
   }
 }
 

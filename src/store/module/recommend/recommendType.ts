@@ -20,12 +20,22 @@ interface INewDiscChilden {
   childen: unknown;
 }
 
+//排行榜
+export type ITopListType = ITopListCategory[];
+
+export interface ITopListCategory {
+  id: number;
+  name: string;
+  imageUrl: string;
+  list: unknown[];
+}
+
 //recommend模块state的类型
 export interface IRecommendStore {
   banner: unknown[];
   hotRecommend: IHotRecommend[];
   newDiscData: unknown[];
-  originalList: unknown[];
-  soarList: unknown[];
-  newsList: unknown[];
+  topList: ITopListType[];
+  settledSong: unknown[];
+  anchors: unknown[];
 }

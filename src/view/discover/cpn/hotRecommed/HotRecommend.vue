@@ -7,7 +7,7 @@
     <ul class="hot_list">
       <li
         class="hot_item"
-        v-for="hotItem in hotRecommend.slice(0, 8)"
+        v-for="hotItem in hotRecommendSlice"
         :key="hotItem.id"
       >
         <div class="context">
@@ -15,7 +15,7 @@
           <div class="options">
             <span class="listen"></span>
             <span class="number">{{ formatCount(hotItem.playCount) }}</span>
-            <a href="javascript:;"></a>
+            <a href="javascript:;" @click="play(hotItem.id)"></a>
           </div>
         </div>
         <p class="title">
@@ -45,11 +45,19 @@ export default defineComponent({
 
     //获取热门推荐数据
     const hotRecommend = computed(() => Store.getters.getHotRecommend);
-    console.log(hotRecommend.value);
-    [].slice;
+
+    const hotRecommendSlice = computed(() =>
+      hotRecommend.value ? hotRecommend.value.slice(0, 8) : []
+    );
+
+    const play = (id: number) => {
+      Store.dispatch("play", { type: "LIST", id: id });
+    };
     return {
       categoryData,
       hotRecommend,
+      hotRecommendSlice,
+      play,
       formatCount,
     };
   },

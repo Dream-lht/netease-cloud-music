@@ -1,14 +1,23 @@
 <template>
   <div>
     <recommend-title title="新碟上架"></recommend-title>
-    <el-carousel :interval="2000" arrow="always" :autoplay="false">
-      <el-carousel-item v-for="(desc, index) in newDiscData" :key="index">
+    <el-carousel
+      :interval="2000"
+      arrow="always"
+      :autoplay="false"
+      v-if="isReactive"
+    >
+      <el-carousel-item v-for="(desc, index) in newDiscDataReview" :key="index">
         <ul class="desc_list">
           <li v-for="item in desc.childen" :key="item.id" class="desc_item">
             <div>
               <img :src="item.picUrl" class="desc_picUrl" />
               <a href="javasript:;" class="desc_bg"></a>
-              <a href="javascript:;" class="desc_play"></a>
+              <a
+                href="javascript:;"
+                class="desc_play"
+                @click="play(item.id)"
+              ></a>
             </div>
             <p class="title">
               <a href="javascript:;">
@@ -29,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 
 import RecommendTitle from "../recommendTitle/RecommendTitle.vue";
 
@@ -38,10 +47,22 @@ export default defineComponent({
   components: { RecommendTitle },
   setup() {
     const Store = useStore();
-    const newDiscData = computed(() => Store.getters.getNewDisc);
     Store.dispatch("getNewDiscData");
+    const isReactive = ref(false);
+    const newDiscData = computed(() => Store.getters.getNewDisc);
+    const newDiscDataReview = computed(() =>
+      newDiscData.value ? newDiscData.value : []
+    );
 
-    return { newDiscData };
+    const play = (id: number) => {
+      console.log(id);
+      Store.dispatch("play", { type: "SONG", id: id });
+    };
+
+    watch(newDiscDataReview, () => {
+      isReactive.value = true;
+    });
+    return { newDiscData, newDiscDataReview, isReactive, play };
   },
 });
 </script>
@@ -93,13 +114,17 @@ export default defineComponent({
             background-position: 0 0;
           }
           .title a {
-            width: 100%;
+            display: inline-block;
+            width: 100px;
             font-size: 12px;
             color: #000;
             overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
           .author a {
-            width: 100%;
+            display: inline-block;
+            width: 100px;
             font-size: 12px;
             color: #666;
             overflow: hidden;
